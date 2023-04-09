@@ -17,6 +17,7 @@ const rl = readline.createInterface({
         // * 4 is the largest, 
         // * 1 is the smallest
 
+//JS object with three arrays
 let stacks = {
   a: [4, 3, 2, 1],
   b: [],
@@ -32,21 +33,23 @@ const printStacks = () => {
 
 // Next, what do you think this function should do?
 const movePiece = (startStack, endStack) => {
-  // Your code here
+  //if the move is legal then we can make a move, otherwise do nothing
+  if(isLegal){
+    //remove a piece from startStack
+    let ring = stacks[startStack].pop()
+    
+    //add ring to other stack
+    stacks[endStack].push(ring)
+  }
 
-}//remove a piece from startStack
-  let ring = stacks[startStack].pop()
-  
-  //add ring to other stack
-  stacks[endStack].push(ring)
-
+}
 // Before you move, should you check if the move it actually allowed? Should 3 be able to be stacked on 2
-const isLegal = () => {
+const isLegal = (startStack,endStack) => {
   // Your code here
-
-
-
-  
+  if(stacks[startStack.pop()] > stacks[endStack.pop()])
+    return true 
+  else
+    return false
 }
 
 // What is a win in Towers of Hanoi? When should this function run?

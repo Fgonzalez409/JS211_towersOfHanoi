@@ -32,36 +32,56 @@ const printStacks = () => {
 }
 
 // Next, what do you think this function should do?
+
 const movePiece = (startStack, endStack) => {
+  
+  
   //if the move is legal then we can make a move, otherwise do nothing
-  if(isLegal){
+  if(isLegal(startStack, endStack)){
     //remove a piece from startStack
     let ring = stacks[startStack].pop()
     
     //add ring to other stack
     stacks[endStack].push(ring)
   }
-
+  else{
+    console.log("Illegal Move!")
+    console.log("")
+  }
+  
 }
 // Before you move, should you check if the move it actually allowed? Should 3 be able to be stacked on 2
 const isLegal = (startStack,endStack) => {
-  // Your code here
-  if(stacks[startStack.pop()] > stacks[endStack.pop()])
-    return true 
-  else
-    return false
+
+  //this function validates if a move is legal
+  //create varialbes to reference the last element in the start stack and in the end stack
+  const startStackTop = stacks[startStack][stacks[startStack].length-1]
+  const endStackTop = stacks[endStack][stacks[endStack].length-1]
+
+  return startStackTop < endStackTop || stacks[endStack].length === 0
 }
 
 // What is a win in Towers of Hanoi? When should this function run?
 const checkForWin = () => {
-  // Your code here
+  
+  //if the length of the end stack reaches 4 the game should be won
+  if((stacks['b'].length == 4) || (stacks['c'].length == 4)){
+    return true
+  }
+  else {
+    return false
+  }
 
+  
 }
 
 // When is this function called? What should it do with its argument?
 const towersOfHanoi = (startStack, endStack) => {
   // Your code here
     movePiece(startStack, endStack)
+    if(checkForWin()){
+      console.log("You have won!!!")
+    }
 }
 
 const getPrompt = () => {

@@ -8,42 +8,75 @@
 // * Delete these comment lines!
 
 let stone = null
+let moveCount = 0;
 
 // this function is called when a row is clicked. 
 // Open your inspector tool to see what is being captured and can be used.
 const selectRow = (row) => {
   const currentRow = row.getAttribute("data-row")
-  
-  console.log("Yay, we clicked an item", row)
-  console.log("Here is the stone's id: ", row.id)
-  console.log("Here is the stone's data-size: ", currentRow)
-  
-  pickUpStone(row.id)
+
+  if(stone === null)
+    pickUpStone(row.id)
+  else {
+    console.log("Here is the stone's id: ", stone.getAttribute("id"))
+    console.log("Here is the stone's data-size: ", stone.getAttribute("data-size"))
+    console.log("Here is the stone color: " , stone.getAttribute("data-color"))
+    console.log("You dropped the stone at the: ", row.id)
+
+    let lastStone = row.lastChild
+    dropStone(row, row.id)//lastChild
+  }
 } 
 
 // this function can be called to get the last stone in the stack
 // but there might be something wrong with it...
-const pickUpStone = (rowID) => {
+function pickUpStone(rowID) {
 
-  const selectedRow = document.getElementById(rowID);
-  if(selectedRow.value > 0){
-    stone = selectedRow.removeChild(selectedRow.lastChild);
-    console.log("Inside of pickUpStone()", stone)
-  }
+  console.log("Picked up stone from:  ", rowID)
+  let selectedRow = document.getElementById(rowID)
+  stone = selectedRow.removeChild(selectedRow.lastElementChild);
 }
 
 // You could use this function to drop the stone but you'll need to toggle between pickUpStone & dropStone
 // Once you figure that out you'll need to figure out if its a legal move...
 // Something like: if(!stone){pickupStone} else{dropStone}
 
-const dropStone = (rowID, stone) => {
-  if(!stone)
-    document.getElementById(rowID).appendChild(stone)
-  else
-    pickUpStone(rowID)
-  stone = null
+const dropStone = (row, rowID) => {
 
+  if(isLegal(row, rowID)){
+    row.appendChild(stone)
+    stone = null
+    moveCount++
+    document.getElementById("move-count").innerText = moveCount
+    checkForWin(rowID)
+  }
+  else{
+    alert("Invalid move.")
+  }
+  
 }
 
 // * Remember you can use your logic from 'main.js' to maintain the rules of the game. But how? Follow the flow of data just like falling dominoes.
 
+function isLegal(row, rowID){
+
+  if(row.lastElementChild == null)
+    return true
+  else if (stone.getAttribute("data-size") < row.lastElementChild.getAttribute("data-size"))
+    return true
+  else
+    return false
+}
+
+function checkForWin(rowID){
+  if((rowID) !== "bottom-row" && 
+  document.getElementById(rowID).getElementsByClassName('stone').length == 4){
+    alert("You win!!! It took you " + moveCount + " moves!")
+    reset()
+  }
+}
+
+function reset(){
+  moveCount = 0
+
+}
